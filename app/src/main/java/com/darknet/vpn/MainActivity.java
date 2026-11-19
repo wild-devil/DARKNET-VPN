@@ -87,11 +87,20 @@ public class MainActivity extends Activity {
             Path path = polygon(pts);
             RectF bounds = new RectF();
             path.computeBounds(bounds, true);
+
+            android.graphics.Region region = new android.graphics.Region();
+            region.setPath(path, new android.graphics.Region(
+                (int) Math.floor(bounds.left),
+                (int) Math.floor(bounds.top),
+                (int) Math.ceil(bounds.right),
+                (int) Math.ceil(bounds.bottom)
+            ));
+
             fill(Color.rgb(0, 100, 190));
             for (float y = bounds.top; y < bounds.bottom; y += 5.2f) {
                 for (float x = bounds.left; x < bounds.right; x += 5.2f) {
                     float xx = x + ((((int)(y * 3) + seed) % 2) * 2.4f);
-                    if (path.contains(xx, y)) c.drawCircle(xx, y, 0.85f, p);
+                    if (region.contains(Math.round(xx), Math.round(y))) c.drawCircle(xx, y, 0.85f, p);
                 }
             }
         }
